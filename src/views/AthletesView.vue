@@ -5,7 +5,7 @@
       <div class="container-fluid">
         <a class="navbar-brand" >运动员信息搜索</a>
         <form class="d-flex" role="search">
-          <input v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" >
+          <input id="searchAthlete"  v-model="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" >
           <!--     将绑定事件     -->
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>

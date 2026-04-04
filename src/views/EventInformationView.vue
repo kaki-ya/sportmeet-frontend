@@ -26,7 +26,7 @@
           <!-- 编辑/删除按钮：靠右显示，不影响原布局 -->
           <div class="col-2 d-flex gap-2 justify-content-end">
             <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="openEditModal(item)">编辑</button>
-            <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="handleDelete(item.eventID)">删除</button>
+            <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="handleDelete(item.eventId)">删除</button>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default{
       eventList: [],        // 赛事列表（后端返回）
       isEdit: false,        // 区分新增/编辑模式
       form: {               // 新增/编辑表单数据
-        eventID: '',
+        eventId: '',
         eventName: '',
         eventTime: '',
         eventPlace: ''
@@ -182,11 +182,11 @@ export default{
     },
 
     // 4. 删除赛事（对接/DeleteEvent）
-    async handleDelete(eventID){
+    async handleDelete(eventId){
       // 二次确认，防止误删
       if(!confirm('确定要删除该赛事吗？删除后无法恢复！')) return
       try{
-        await axios.post("http://localhost:8081/Events/DeleteEvent", { eventID })
+        await axios.post("http://localhost:8081/Events/DeleteEvent", { eventId })
         alert('赛事删除成功！')
         // 刷新列表
         this.getAllEvents()

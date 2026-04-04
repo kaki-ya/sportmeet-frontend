@@ -56,7 +56,7 @@
                     <span class="fw-bold">匿名用户</span>
                     <small class="text-muted ms-2">{{ msg.time }}</small>
                   </div>
-                  <button class="btn btn-sm btn-danger" @click="delMsg(index)">删除</button>
+                  <button id="messageFromUnknownUser" class="btn btn-sm btn-danger" @click="delMsg(index)">删除</button>
                 </div>
                 <p class="mb-0 mt-2">{{ msg.content }}</p>
               </div>
@@ -66,8 +66,8 @@
             </div>
             <div class="card-footer">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="写下你的留言..." v-model="newMessage" @keyup.enter="sendMsg">
-                <button class="btn btn-success" @click="sendMsg">发表留言</button>
+                <input id="TypeArea" type="text" class="form-control" placeholder="写下你的留言..." v-model="newMessage" @keyup.enter="sendMsg">
+                <button id="sendMessage" class="btn btn-success" @click="sendMsg">发表留言</button>
               </div>
             </div>
           </div>
@@ -130,16 +130,16 @@
           <div class="modal-header"><h5>报名赛事</h5></div>
           <div class="modal-body p-3">
             <div class="mb-2">当前运动员：{{ athlete.athleteName }}</div>
-            <select class="form-select" v-model="joinForm.eventID">
+            <select id="SelectEvent" class="form-select" v-model="joinForm.eventID">
               <option value="">请选择赛事</option>
-              <option v-for="e in eventList" :key="e.eventId" :value="e.eventId">
+              <option id="EventOption" v-for="e in eventList" :key="e.eventId" :value="e.eventId">
                 {{ e.eventName }}
               </option>
             </select>
           </div>
           <div class="modal-footer">
             <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">取消</button>
-            <button class="btn btn-sm btn-primary" @click="joinEvent">确认报名</button>
+            <button id="confirm" class="btn btn-sm btn-primary" @click="joinEvent">确认报名</button>
           </div>
         </div>
       </div>
@@ -205,10 +205,8 @@ export default {
     async joinEvent() {
       try {
         await axios.post("http://localhost:8081/Racings/AddRacing", this.joinForm);
-        alert("报名成功！");
         bootstrap.Modal.getInstance(document.getElementById("joinEventModal")).hide();
       } catch (e) {
-        alert("报名失败！");
         console.error(e);
       }
     },
