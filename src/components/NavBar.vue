@@ -46,6 +46,7 @@
             </li>
             <li class="nav-item">
               <router-link
+                  id="quit"
                   class="nav-link"
                   to=""
                   @click.prevent="logout"

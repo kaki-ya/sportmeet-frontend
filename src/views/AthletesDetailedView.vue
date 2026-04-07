@@ -37,7 +37,7 @@
           </div>
 
           <div v-else class="text-center" style="font-size: 18px;">
-            <button class="btn btn-sm btn-primary" @click="openAddModal">
+            <button id="bdydy" class="btn btn-sm btn-primary" @click="openAddModal">
               暂无绑定运动员，点击绑定运动员
             </button>
           </div>

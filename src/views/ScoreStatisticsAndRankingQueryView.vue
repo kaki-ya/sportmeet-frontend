@@ -10,7 +10,7 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <span>🏆 赛事排名（运动员）</span>
+            <span>赛事排名（运动员）</span>
           </div>
 
           <div class="card-body p-2">
@@ -30,8 +30,8 @@
                   </div>
                 </div>
                 <div class="d-flex gap-2">
-                  <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="openUpdateModal(item)">修改分数</button>
-                  <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="deleteRacing(item)">删除</button>
+                  <button id="changeScore" v-if="userRole === 'admin'" class="btn btn-outline-success" @click="openUpdateModal(item)">修改分数</button>
+                  <button id="deleteScore" v-if="userRole === 'admin'" class="btn btn-outline-success" @click="deleteRacing(item)">删除</button>
                 </div>
               </li>
               <li class="list-group-item text-center text-muted" v-if="eventRankList.length === 0">
@@ -47,7 +47,7 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <span> 队伍排名（总分）</span>
-            <button class="btn btn-sm btn-success" @click="getTeamRank">刷新</button>
+            <button id="refresh" class="btn btn-sm btn-success" @click="getTeamRank">刷新</button>
           </div>
           <div class="card-body p-2">
             <ul class="list-group">
@@ -74,11 +74,11 @@
         <div class="modal-content">
           <div class="modal-header"><h5>新增报名</h5></div>
           <div class="modal-body p-3">
-            <select class="form-select mb-2" v-model="addForm.athleteID">
+            <select class="form-select mb-2" v-model="addForm.athleteId">
               <option v-for="item in athleteList" :key="item.athleteId" :value="item.athleteId">{{ item.athleteName }}</option>
             </select>
-            <select class="form-select" v-model="addForm.eventID">
-              <option v-for="item in eventList" :key="item.eventID" :value="item.eventID">{{ item.eventName }}</option>
+            <select class="form-select" v-model="addForm.eventId">
+              <option v-for="item in eventList" :key="item.eventId" :value="item.eventId">{{ item.eventName }}</option>
             </select>
           </div>
           <div class="modal-footer">
@@ -95,11 +95,11 @@
         <div class="modal-content">
           <div class="modal-header"><h5>修改分数</h5></div>
           <div class="modal-body p-3">
-            <input type="number" class="form-control" v-model="updateForm.score">
+            <input id = "inputEditScore" type="number" class="form-control" v-model="updateForm.score">
           </div>
           <div class="modal-footer">
             <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">取消</button>
-            <button class="btn btn-sm btn-warning" @click="updateRacingScore">保存</button>
+            <button id="btnToChangeScore" class="btn btn-sm btn-warning" @click="updateRacingScore">保存</button>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ export default {
       athleteList: [],
       eventRankList: [],
       teamRankList: [],
-      addForm: { athleteID: "", eventID: "" },
+      addForm: { athleteId: "", eventId: "" },
       updateForm: { id: "", score: "" }
     };
   },
@@ -167,18 +167,16 @@ export default {
         this.eventRankList = [];
       }
     },
-
     async getTeamRank() {
-      const {data} = await axios.get("http://localhost:8081/Teams/SearchAllTeam");
-      this.teamRankList = data.sort((a, b) => (b.teamScore || 0) - (a.teamScore || 0));
+      const { data } = await axios.get("http://localhost:8081/Teams/getRealTimeTeamRank");
+      this.teamRankList = data;
     },
     openAddModal() {
       new bootstrap.Modal(document.getElementById("addModal")).show();
     },
     async addRacing() {
       await axios.post("http://localhost:8081/Racings/AddRacing", this.addForm);
-      alert("新增成功");
-      this.getEventRank();
+      await Promise.all([this.getEventRank(), this.getTeamRank()]);
       bootstrap.Modal.getInstance(document.getElementById("addModal")).hide();
     },
     openUpdateModal(item) {
@@ -187,7 +185,6 @@ export default {
       new bootstrap.Modal(document.getElementById("updateModal")).show();
     },
 
-    // ✅ 修复完成：修改分数
     async updateRacingScore() {
       try {
         if (!this.updateForm.id) {
@@ -206,23 +203,17 @@ export default {
           }
         });
 
-        alert("修改成功");
-        this.getEventRank();
-        this.getTeamRank();
+        await Promise.all([this.getEventRank(), this.getTeamRank()]);
         bootstrap.Modal.getInstance(document.getElementById("updateModal")).hide();
       } catch (err) {
         console.error(err);
-        alert("修改失败：参数错误或服务器异常");
       }
     },
 
-    // ✅ 修复完成：删除
     async deleteRacing(item) {
-      if (!confirm("确定删除？")) return;
       try {
         const deleteId = item.originId || item.id;
         if (!deleteId) {
-          alert("错误：无法获取记录ID");
           return;
         }
 
@@ -230,12 +221,10 @@ export default {
           params: {id: deleteId}
         });
 
-        alert("删除成功");
-        this.getEventRank();
-        this.getTeamRank();
+        await Promise.all([this.getEventRank(), this.getTeamRank()]);
       } catch (err) {
         console.error(err);
-        alert("删除失败");
+
       }
     }
   }

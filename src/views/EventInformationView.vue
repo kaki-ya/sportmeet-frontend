@@ -6,16 +6,16 @@
         <a class="navbar-brand">赛事项目</a>
         <form class="d-flex" role="search" @submit.prevent="handleSearch">
           <!-- 新增赛事按钮：放在搜索框左侧，保留原表单布局 -->
-          <button v-if="userRole === 'admin'" class="btn btn-primary me-4" type="button" @click="openAddModal">add</button>
+          <button id="AddEvent" v-if="userRole === 'admin'" class="btn btn-primary me-4" type="button" @click="openAddModal">add</button>
           <!-- 原搜索框，无任何样式修改 -->
-          <input class="form-control me-3" type="search" placeholder="Search" aria-label="Search" v-model="keyword">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input id="searchEventProject" class="form-control me-3" type="search" placeholder="Search" aria-label="Search" v-model="keyword">
+          <button id="bnt_Search" class="btn btn-outline-success" type="submit" >Search</button>
         </form>
       </div>
     </nav>
 
     <!--  赛事信息 ：完全保留原卡片样式、布局，仅新增编辑/删除按钮 -->
-    <div class="card" v-for="item in showEvent" :key="item.eventID">
+    <div id="EventIndividual" class="card" v-for="item in showEvent" :key="item.eventID">
       <div class="card-body">
         <div class="row align-items-center">
           <div class="col-10">
@@ -25,8 +25,8 @@
           </div>
           <!-- 编辑/删除按钮：靠右显示，不影响原布局 -->
           <div class="col-2 d-flex gap-2 justify-content-end">
-            <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="openEditModal(item)">编辑</button>
-            <button v-if="userRole === 'admin'" class="btn btn-outline-success" @click="handleDelete(item.eventId)">删除</button>
+            <button id="EditEvent" v-if="userRole === 'admin'" class="btn btn-outline-success" @click="openEditModal(item)">编辑</button>
+            <button id="deleteEvent" v-if="userRole === 'admin'" class="btn btn-outline-success" @click="handleDelete(item.eventId)">删除</button>
           </div>
         </div>
       </div>
@@ -43,20 +43,20 @@
           <div class="modal-body p-4">
             <div class="mb-3">
               <label class="form-label">赛事名称 <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" v-model="form.eventName" placeholder="请输入赛事名称" required>
+              <input id="inputName" type="text" class="form-control" v-model="form.eventName" placeholder="请输入赛事名称" required>
             </div>
             <div class="mb-3">
               <label class="form-label">赛事时间 <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" v-model="form.eventTime" placeholder="请输入赛事时间" required>
+              <input id="inputTime" type="text" class="form-control" v-model="form.eventTime" placeholder="请输入赛事时间" required>
             </div>
             <div class="mb-3">
               <label class="form-label">赛事地点 <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" v-model="form.eventPlace" placeholder="请输入赛事地点" required>
+              <input id="inputPlace" type="text" class="form-control" v-model="form.eventPlace" placeholder="请输入赛事地点" required>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" @click="submitForm">提交</button>
+            <button id="cancelEdit" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button id="submitEdit" type="button" class="btn btn-primary" @click="submitForm">提交</button>
           </div>
         </div>
       </div>
@@ -108,6 +108,14 @@ export default{
     }
   },
 
+  watch: {
+    keyword(newVal) {
+      if (newVal === '') {
+        this.getAllEvents() // 空的时候重新加载全部
+      }
+    }
+  },
+
   methods:{
     getUserRole(){
       const userInfo = JSON.parse(localStorage.getItem('userInfo') ||'{}')
@@ -138,7 +146,6 @@ export default{
         this.eventList = res.data
       }catch(err){
         console.log('搜索赛事失败：', err)
-        alert('搜索失败，请检查后端接口')
       }
     },
 
@@ -165,11 +172,9 @@ export default{
         if(this.isEdit){
           // 编辑模式：调用更新接口
           await axios.post("http://localhost:8081/Events/UpdateEvent", this.form)
-          alert('赛事编辑成功！')
         }else{
           // 新增模式：调用新增接口
           await axios.post("http://localhost:8081/Events/AddEvent", this.form)
-          alert('赛事新增成功！')
         }
         // 关闭弹窗
         bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide()
@@ -183,16 +188,12 @@ export default{
 
     // 4. 删除赛事（对接/DeleteEvent）
     async handleDelete(eventId){
-      // 二次确认，防止误删
-      if(!confirm('确定要删除该赛事吗？删除后无法恢复！')) return
       try{
         await axios.post("http://localhost:8081/Events/DeleteEvent", { eventId })
-        alert('赛事删除成功！')
         // 刷新列表
         this.getAllEvents()
       }catch(err){
         console.log('删除赛事失败：', err)
-        alert('删除失败，请检查后端接口')
       }
     }
   }

@@ -22,14 +22,14 @@
             <label for="role" class="form-label">角色</label>
             <select v-model="role" class="form-select" id="role">
               <option value="" disabled>请选择角色</option>
-              <option value="user">user</option>
+              <option id="SelectUser" value="user">user</option>
               <option value="admin">admin</option>
             </select>
           </div>
 
           <div class="error-message mb-2">{{ errorMessage }}</div>
 
-          <button type="submit" class="btn btn-primary">注册</button>
+          <button id="completeRegister" type="submit" class="btn btn-primary">注册</button>
         </form>
       </div>
     </div>
@@ -68,17 +68,11 @@ export default {
 
       try {
         // 1. 调用注册接口
-        const res = await axios.post("/User/register", {
+        await axios.post("/User/register", {
           username: username.value,
           passwd: password.value,
           role: role.value
         })
-
-        // 2. 拿到后端返回的 userId（自增ID）
-        const userId = res.data
-
-        // 3. ✅ 弹窗显示注册成功 + 用户ID
-        alert(`注册成功！你的用户ID是：${userId}`)
 
         // 4. 跳转到登录页
         router.push('/login')
