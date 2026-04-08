@@ -1,6 +1,7 @@
 <template>
   <ContentBase>
     404
+
   </ContentBase>
 </template>
 

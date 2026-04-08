@@ -3,6 +3,7 @@
   <NavBar/>
   <!-- 使用router-view动态显示页面信息 -->
   <router-view/>
+
 </template>
 
 <script>
@@ -25,5 +26,7 @@ export default {
 </script>
 
 <style>
-
+router-view {
+  flex: 1;
+}
 </style>

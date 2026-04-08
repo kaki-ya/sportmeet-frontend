@@ -28,7 +28,6 @@
                 <button v-if="userRole === 'admin'" @click="handleDelete" class="btn btn-outline-success">
                   删除运动员
                 </button>
-                <!-- ✅ 新增：报名赛事按钮 -->
                 <button @click="openJoinEventModal" id="addEvent" class="btn btn-outline-success">
                   报名赛事
                 </button>
@@ -121,9 +120,6 @@
       </div>
     </div>
 
-    <!-- ======================
-         ✅ 新增：报名赛事弹窗
-     ====================== -->
     <div class="modal fade" id="joinEventModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">

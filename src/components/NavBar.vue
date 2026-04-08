@@ -19,6 +19,9 @@
           <li class="nav-item">
             <router-link id="Ranking" class="nav-link" :to="{name:'ScoreStatisticsAndRankingQuery'}">分数统计与排名查询</router-link>
           </li>
+          <li class="nav-item">
+            <router-link id="Team" class="nav-link" :to="{name:'TeamInformation'}">队伍信息</router-link>
+          </li>
         </ul>
 
         <ul class="navbar-nav">
@@ -101,7 +104,6 @@ export default {
 
       if (!myName) return
 
-      // ✅ 直接用 name 跳转！！！ 根本不需要查接口、不需要拿 id！
       router.push(`/AthletesDetailed/${myName}`)
     }
 

@@ -7,6 +7,8 @@ import ScoreStatisticsAndRankingQueryView from "@/views/ScoreStatisticsAndRankin
 import AthletesView from "@/views/AthletesView.vue";
 import NotFound from "@/views/NotFound.vue";
 import AthletesDetailedView from "@/views/AthletesDetailedView.vue";
+import TeamView from "@/views/TeamView.vue";
+import TeamDetail from "@/views/TeamDetail.vue";
 
 const routes = [
   {
@@ -48,6 +50,16 @@ const routes = [
     path: '/404',
     name: '404',
     component: NotFound
+  },
+  {
+    path: '/TeamDetail/:teamId',
+    name: 'TeamDetail',
+    component: TeamDetail
+  },
+  {
+    path: '/TeamInformation',
+    name: 'TeamInformation',
+    component: TeamView
   },
   {
     path: '/:pathMatch(.*)*',

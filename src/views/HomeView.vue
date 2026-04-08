@@ -58,7 +58,28 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <div class="card">
+        <div class="card-body">
+          <ur>
+            <div class="card-header">赛事新闻</div>
+            <div class="card-body  d-flex flex-column justify-content-center">
+              <p class="card-text text-left">我校校园运动会即将如期举行，赛场设置短跑、接力、跳远等多个比赛项目，现诚邀全校同学积极报名参赛。希望大家在赛场上展现拼搏风采，感受运动快乐，在竞技与协作中凝聚力量。无论参赛还是助威，都愿大家共享运动时光，让活力与热情洒满校园，期待同学们的精彩表现！</p>
+              <p class="card-text text-left">Our school sports meeting is coming soon. We have set up many events including sprints, relays and long jumps, and invite all students to sign up actively. We hope everyone can show your spirit of perseverance on the field, enjoy the joy of sports, and gather strength through competition and cooperation. Whether you participate or cheer, may we all share the sports time and fill the campus with vitality. Looking forward to your wonderful performance!</p>
+            </div>
+          </ur>
+        </div>
+      </div>
+    </div>
+
   </ContentBase>
+
+  <div class="card">
+    <div class="card-body text-center d-flex flex-column justify-content-center">
+      <p class="card-text" id="footer">04232027陈施威  、   04232030范优   、  04232017谢增添    、   04232031郭俊鹏</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -78,4 +99,7 @@ export default {
   object-fit: cover;
 }
 
+#footer{
+  font-size: 12px;
+}
 </style>
